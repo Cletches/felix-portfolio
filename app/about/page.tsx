@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Section from "@/components/Section";
+import { getImagePath } from "@/lib/paths";
 
 export default function AboutPage() {
   return (
@@ -10,7 +11,7 @@ export default function AboutPage() {
           style={{ borderColor: "var(--border-subtle)" }}
         >
           <Image
-            src="/images/profile.jpg"
+            src={getImagePath("/images/profile.jpg")}
             alt="Felix Ofori"
             fill
             priority

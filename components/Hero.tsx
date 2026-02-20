@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { getImagePath } from "@/lib/paths";
 
 export default function Hero() {
   const { scrollY } = useScroll();
@@ -23,7 +24,7 @@ export default function Hero() {
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6">
       <motion.div
-        style={{ y: backgroundY, backgroundImage: "url('/images/hero.jpg')" }}
+        style={{ y: backgroundY, backgroundImage: `url('${getImagePath("/images/hero.jpg")}')` }}
         className="absolute inset-0 bg-cover bg-center"
       />
       <div className="absolute inset-0 bg-black/60" />

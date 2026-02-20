@@ -42,20 +42,25 @@ jobs:
       - name: Restructure for GitHub Pages
         run: |
           cd out
-          
-          # Create subdirectories for all HTML files except index.html
+
+          # Create subdirectories for all HTML files except index.html, 404.html, _not-found.html
           for file in *.html; do
             if [ "$file" != "index.html" ] && [ "$file" != "404.html" ] && [ "$file" != "_not-found.html" ]; then
               # Get the filename without extension
               dir="${file%.html}"
-              # Skip if directory already exists (shouldn't happen)
-              if [ ! -d "$dir" ]; then
+              
+              # Remove metadata files from the directory if it exists
+              if [ -d "$dir" ]; then
+                find "$dir" -maxdepth 1 -type f -name "__next*" -o -name "*.txt" | xargs rm -f
+              else
                 mkdir -p "$dir"
-                mv "$file" "$dir/index.html"
               fi
+              
+              # Move the HTML file to index.html in the directory
+              mv "$file" "$dir/index.html"
             fi
           done
-          
+
           # Handle nested HTML files (like projects/[slug].html)
           for dir in */; do
             if [ "$dir" != "_next/" ]; then
@@ -66,14 +71,22 @@ jobs:
                   if [ "$filename" != "index.html" ]; then
                     basename_without_ext="${filename%.html}"
                     subdir="$dir$basename_without_ext"
-                    mkdir -p "$subdir"
+                    
+                    # Clean up metadata in the target directory if it exists
+                    if [ -d "$subdir" ]; then
+                      find "$subdir" -maxdepth 1 -type f \( -name "__next*" -o -name "*.txt" \) -delete
+                    else
+                      mkdir -p "$subdir"
+                    fi
+                    
+                    # Move the HTML file to index.html
                     mv "$file" "$subdir/index.html"
                   fi
                 fi
               done
             fi
           done
-          
+
           cd ..
 
       - name: Upload artifact

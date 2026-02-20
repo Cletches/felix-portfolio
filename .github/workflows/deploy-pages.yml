@@ -35,9 +35,6 @@ jobs:
 
       - name: Build with Next.js
         run: npm run build
-        env:
-          GITHUB_ACTIONS: "true"
-          GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: Restructure for GitHub Pages
         run: |
@@ -88,6 +85,9 @@ jobs:
           done
 
           cd ..
+
+      - name: Create CNAME file
+        run: echo "felixoforiworld.org" > out/CNAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

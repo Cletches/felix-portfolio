@@ -8,6 +8,10 @@ type ProjectPageProps = {
   params: { slug: string };
 };
 
+export function generateStaticParams() {
+  return projects.map((project) => ({ slug: project.slug }));
+}
+
 export default function ProjectDetailPage({ params }: ProjectPageProps) {
   const { slug } = params;
   const project = projects.find((item) => item.slug === slug);

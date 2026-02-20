@@ -5,15 +5,15 @@ import Section from "@/components/Section";
 import { projects } from "@/data/projects";
 
 type ProjectPageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
 }
 
-export default function ProjectDetailPage({ params }: ProjectPageProps) {
-  const { slug } = params;
+export default async function ProjectDetailPage({ params }: ProjectPageProps) {
+  const { slug } = await params;
   const project = projects.find((item) => item.slug === slug);
 
   if (!project) {

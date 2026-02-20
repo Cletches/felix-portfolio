@@ -39,6 +39,43 @@ jobs:
           GITHUB_ACTIONS: "true"
           GITHUB_REPOSITORY: ${{ github.repository }}
 
+      - name: Restructure for GitHub Pages
+        run: |
+          cd out
+          
+          # Create subdirectories for all HTML files except index.html
+          for file in *.html; do
+            if [ "$file" != "index.html" ] && [ "$file" != "404.html" ] && [ "$file" != "_not-found.html" ]; then
+              # Get the filename without extension
+              dir="${file%.html}"
+              # Skip if directory already exists (shouldn't happen)
+              if [ ! -d "$dir" ]; then
+                mkdir -p "$dir"
+                mv "$file" "$dir/index.html"
+              fi
+            fi
+          done
+          
+          # Handle nested HTML files (like projects/[slug].html)
+          for dir in */; do
+            if [ "$dir" != "_next/" ]; then
+              for file in "$dir"*.html; do
+                if [ -f "$file" ]; then
+                  # Get the filename without extension
+                  filename=$(basename "$file")
+                  if [ "$filename" != "index.html" ]; then
+                    basename_without_ext="${filename%.html}"
+                    subdir="$dir$basename_without_ext"
+                    mkdir -p "$subdir"
+                    mv "$file" "$subdir/index.html"
+                  fi
+                fi
+              done
+            fi
+          done
+          
+          cd ..
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

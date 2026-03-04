@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -16,6 +15,9 @@ export const metadata: Metadata = {
   title: "Felix Ofori | Software Engineer",
   description:
     "Modern portfolio for Felix Ofori - software engineer, builder, and creator.",
+  other: {
+    "google-adsense-account": "ca-pub-3359228672904175",
+  },
 };
 
 export default function RootLayout({
@@ -26,11 +28,10 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark">
       <head>
-        <Script
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3359228672904175"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
       </head>
       <body className={`${geistSans.variable} antialiased`}>
